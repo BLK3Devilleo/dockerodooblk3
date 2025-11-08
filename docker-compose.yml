@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8069:8069"
+    depends_on:
+      - db
+    environment:
+      - HOST=odoo.filocentraldemando.site
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=TU_PASS
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./odoo.conf:/etc/odoo/odoo.conf
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=TU_PASS
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+volumes:
+  odoo-db-data:
